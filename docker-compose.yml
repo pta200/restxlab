@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  # flask app
+  service:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: restxlab-service
+    ports:
+      - "5000:5000"
+    env_file:
+      - development.env
+
+    # Database layer
+  database:
+    image: postgres:12.4
+    container_name: restxlab-db
+    env_file:
+      - development.env
+    expose:
+     - "5432"
+    volumes:
+      - restxlab-data:/var/lib/postgresql/data
+
+volumes:
+  restxlab-data:
