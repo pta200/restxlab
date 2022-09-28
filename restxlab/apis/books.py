@@ -8,13 +8,12 @@ from core.database import db_session
 
 
 books_ns = Namespace('library', description='Restx lab with library schema')
-logger = logging.getLogger("app.models")
 
 @books_ns.route('/books')
 class ListBooks(Resource):
     def get(self):
         book_list = Book.query.all()
-        logger.info("GOT LIST")
+        books_ns.logger.info("GOT LIST")
         book_schema = BookSchema(many=True)
         return book_schema.dump(book_list)
 
@@ -22,7 +21,7 @@ class ListBooks(Resource):
 class ListAuthors(Resource):
     def get(self):
         book_list = Author.query.all()
-        logger.info("GOT LIST")
+        books_ns.logger.info("GOT LIST")
         author_schema = AuthorSchema(many=True)
         return author_schema.dump(book_list)
 
@@ -32,7 +31,7 @@ class ManageBooks(Resource):
     @books_ns.doc(BookRequestSchema)
     def post(self):
         try:
-            logger.info("TRY TO LOAD")
+            books_ns.logger.info("TRY TO LOAD")
             book_request = book_request_schema.load(request.get_json())
         except ValidationError as error:
             logger.error("Error parsing payload: %s", error.messages)
@@ -42,7 +41,7 @@ class ManageBooks(Resource):
             }
             return make_response(jsonify(response), 400)
 
-        logger.info("SAVE TO DB")
+        books_ns.logger.info("SAVE TO DB")
 
         new_author = Author(name=request.json['author'])
         db_session.add(new_author)

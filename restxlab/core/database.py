@@ -4,9 +4,9 @@ from sqlalchemy.ext.declarative import declarative_base
 import logging
 from sqlalchemy.engine.url import URL
 import os
+from .db_models import *
 
-
-logger = logging.getLogger("app.database")
+logger = logging.getLogger(__name__)
 logger.info("start postgres engine....")
 
 engine_uri = URL(
@@ -27,7 +27,5 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 def init_db():
-    # import model modules
-    from .db_models import Book
     logger.info("init db....")
     Base.metadata.create_all(bind=engine)
