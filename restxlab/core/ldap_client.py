@@ -60,7 +60,7 @@ class LDAPClient:
             for url in ldap_urls:
                 servers.append(ldap3.Server(host=url, connect_timeout=connect_timeout))
 
-            pool = ldap3.ServerPool(servers, pool_strategy=ldap3.ROUND_ROBIN, active=True, exhaust=True)
+            pool = ldap3.ServerPool(servers, pool_strategy=ldap3.FIRST, active=True, exhaust=True)
 
             self.connection = ldap3.Connection(
                 server=pool,
